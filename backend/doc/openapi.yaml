@@ -1,17 +1,21 @@
 openapi: 3.0.3
 info:
-  title: youtube-recipe
+  title: RecipeTube API
   version: 1.0.0
+  description: API for extracting recipes from YouTube videos
 
-servers: []
+servers:
+  - url: http://localhost:3000
+    description: Local development server
 
 paths:
-  "/api/v1/recipes/youtube_api":
+  /api/v1/recipes/youtube_api:
     post:
-      summary: Create recipe from YouTube URL
+      summary: Extract or retrieve a recipe from a YouTube URL
       tags:
-        - Api::V1::Recipes
+        - Recipes
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -19,75 +23,126 @@ paths:
               properties:
                 youtube_url:
                   type: string
+                  format: uri
+                  example: https://www.youtube.com/watch?v=abcd1234
               required:
                 - youtube_url
-            example:
-              youtube_url: https://www.youtube.com/watch?v=abcd1234
       responses:
         "200":
-          description: Recipe created or returned if already exists
+          description: Recipe successfully extracted or retrieved
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  title:
-                    type: string
-                  video_id:
-                    type: string
-                  youtube_url:
-                    type: string
-                  thumbnail_url:
-                    type: string
-                  ingredients:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        amount:
-                          type: string
-                      required:
-                        - name
-                        - amount
-                  steps:
-                    type: array
-                    items:
-                      type: string
-                required:
-                  - title
-                  - video_id
-                  - youtube_url
-                  - thumbnail_url
-                  - ingredients
-                  - steps
-              example:
-                title: 簡単オムライスの作り方
-                video_id: abcd1234
-                youtube_url: https://www.youtube.com/watch?v=abcd1234
-                thumbnail_url: https://img.youtube.com/vi/abcd1234/hqdefault.jpg
-                ingredients:
-                  - name: 卵
-                    amount: 2個
-                  - name: ご飯
-                    amount: 1杯
-                steps:
-                  - 卵を溶く
-                  - ご飯を炒める
-                  - 包んで完成
+                $ref: '#/components/schemas/Recipe'
         "400":
-          description: Invalid request
+          description: Invalid request (e.g., missing youtube_url)
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                $ref: '#/components/schemas/Error'
               example:
                 error: youtube_url is required
+        "422":
+          description: Unprocessable entity (e.g., extraction failed)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Failed to extract recipe. Please check Rails logs for details.
         "500":
           description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Recipe:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        video_id:
+          type: string
+        youtube_url:
+          type: string
+        thumbnail_url:
+          type: string
+        steps:
+          type: string
+          description: The full description/steps from the YouTube video
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ingredient'
+      required:
+        - id
+        - title
+        - video_id
+        - youtube_url
+        - thumbnail_url
+        - steps
+        - ingredients
+      example:
+        id: 1
+        title: 簡単オムライスの作り方
+        video_id: abcd1234
+        youtube_url: https://www.youtube.com/watch?v=abcd1234
+        thumbnail_url: https://img.youtube.com/vi/abcd1234/hqdefault.jpg
+        steps: "動画の概要欄テキスト全体が入ります..."
+        created_at: "2026-04-15T10:00:00Z"
+        updated_at: "2026-04-15T10:00:00Z"
+        ingredients:
+          - id: 1
+            recipe_id: 1
+            name: 卵
+            quantity: 2個
+            created_at: "2026-04-15T10:00:00Z"
+            updated_at: "2026-04-15T10:00:00Z"
+          - id: 2
+            recipe_id: 1
+            name: ご飯
+            quantity: 1杯
+            created_at: "2026-04-15T10:00:00Z"
+            updated_at: "2026-04-15T10:00:00Z"
+
+    Ingredient:
+      type: object
+      properties:
+        id:
+          type: integer
+        recipe_id:
+          type: integer
+        name:
+          type: string
+        quantity:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - recipe_id
+        - name
+        - quantity
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
