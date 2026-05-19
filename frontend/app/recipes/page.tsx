@@ -72,21 +72,21 @@ export default function RecipeExtractorPage() {
         <div className="py-2">
           <div className="flex gap-3">
             <Link
-              href="/posts/all"
+              href="recipes/everyonePosts"
               className="px-4 py-2 rounded-xl text-black-300  border-1 border-black-300 transition duration-500 hover:-translate-y-2"
             >
               🏠 みんなの投稿
             </Link>
 
             <Link
-              href="/posts/me"
+              href="recipes"
               className="px-4 py-2 rounded-xl text-black-300 border-1 border-black-300 transition duration-500 hover:-translate-y-2"
             >
               + 投稿
             </Link>
 
             <Link
-              href="/favorites"
+              href=""
               className="px-4 py-2 rounded-xl text-black-300 border-1 border-black-300 transition duration-500 hover:-translate-y-2"
             >
               ❤️ お気に入り
@@ -150,7 +150,7 @@ export default function RecipeExtractorPage() {
                 ))}
               </div>
             </div>
-            <div className="py-4">
+            <div className="py-6">
               <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                 この動画を投稿する
               </button>

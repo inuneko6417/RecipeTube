@@ -21,7 +21,7 @@ export default function Home() {
         </p>
         <div className="flex flex-col items-center gap-4">
           <Link
-            href="/recipe"
+            href="/recipes"
             className="group relative inline-flex items-center justify-center px-12 py-6 text-2xl font-black text-white bg-red-600 rounded-full overflow-hidden transition-all hover:bg-red-700 hover:ring-4 hover:ring-red-100 shadow-2xl shadow-red-200 active:scale-95"
           >
             今すぐレシピを抽出する
@@ -72,7 +72,6 @@ export default function Home() {
           ))}
         </div>
       </main>
-
       <Footer />
     </div>
   );
