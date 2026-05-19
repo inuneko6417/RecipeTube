@@ -69,6 +69,30 @@ export default function RecipeExtractorPage() {
         <h1 className="text-3xl font-bold mb-6 text-center">
           YouTubeレシピ食材抽出
         </h1>
+        <div className="py-2">
+          <div className="flex gap-3">
+            <Link
+              href="recipes/everyonePosts"
+              className="px-4 py-2 rounded-xl text-black-300  border-1 border-black-300 transition duration-500 hover:-translate-y-2"
+            >
+              🏠 みんなの投稿
+            </Link>
+
+            <Link
+              href="recipes"
+              className="px-4 py-2 rounded-xl text-black-300 border-1 border-black-300 transition duration-500 hover:-translate-y-2"
+            >
+              + 投稿
+            </Link>
+
+            <Link
+              href=""
+              className="px-4 py-2 rounded-xl text-black-300 border-1 border-black-300 transition duration-500 hover:-translate-y-2"
+            >
+              ❤️ お気に入り
+            </Link>
+          </div>
+        </div>
 
         <form
           onSubmit={handleSubmit}
@@ -84,7 +108,7 @@ export default function RecipeExtractorPage() {
             required
           />
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             disabled={loading}
           >
             {loading ? "取得中..." : "取得"}
@@ -125,6 +149,11 @@ export default function RecipeExtractorPage() {
                   </div>
                 ))}
               </div>
+            </div>
+            <div className="py-6">
+              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                この動画を投稿する
+              </button>
             </div>
           </div>
         )}
