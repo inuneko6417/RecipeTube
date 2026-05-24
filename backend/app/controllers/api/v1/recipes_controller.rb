@@ -1,5 +1,10 @@
 class Api::V1::RecipesController < ApplicationController
   # ここでyoutubeのURLを受け取り処理している。
+  def index
+    @recipes = Recipe.all.order(created_at: :desc)
+    render json: @recipes.as_json(include: :ingredients)
+  end
+
   def youtube_api
     url = params[:youtube_url]
     return render json: { error: "youtube_url is required" }, status: :bad_request if url.blank?
