@@ -4,6 +4,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { useState, FormEvent, useEffect } from "react";
+import RecipeTabs from "./components/RecipeTabs";
+
 
 type Ingredient = {
   id: number;
@@ -70,28 +72,7 @@ export default function RecipeExtractorPage() {
           YouTubeレシピ食材抽出
         </h1>
         <div className="py-2">
-          <div className="flex gap-3">
-            <Link
-              href="recipes/everyonePosts"
-              className="px-4 py-2 rounded-xl text-black-300  border-1 border-black-300 transition duration-500 hover:-translate-y-2"
-            >
-              🏠 みんなの投稿
-            </Link>
-
-            <Link
-              href="recipes"
-              className="px-4 py-2 rounded-xl text-black-300 border-1 border-black-300 transition duration-500 hover:-translate-y-2"
-            >
-              + 投稿
-            </Link>
-
-            <Link
-              href=""
-              className="px-4 py-2 rounded-xl text-black-300 border-1 border-black-300 transition duration-500 hover:-translate-y-2"
-            >
-              ❤️ お気に入り
-            </Link>
-          </div>
+          <RecipeTabs />
         </div>
 
         <form

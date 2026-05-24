@@ -1,5 +1,5 @@
 const favoritesPosts = () => {
-  return <div>投稿一覧</div>;
+  return <div>お気に入り</div>;
 };
 
 export default favoritesPosts;
