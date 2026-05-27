@@ -5,6 +5,13 @@ class Api::V1::RecipesController < ApplicationController
     render json: @recipes.as_json(include: :ingredients)
   end
 
+  def show
+    @recipe = Recipe.find(params[:id])
+    render json: @recipe.as_json(include: :ingredients)
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Recipe not found" }, status: :not_found
+  end
+
   def youtube_api
     url = params[:youtube_url]
     return render json: { error: "youtube_url is required" }, status: :bad_request if url.blank?

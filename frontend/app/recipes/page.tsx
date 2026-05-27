@@ -3,6 +3,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useState, FormEvent, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import RecipeTabs from "./components/RecipeTabs";
 
 
@@ -21,6 +22,7 @@ type Recipe = {
 };
 
 export default function RecipeExtractorPage() {
+  const router = useRouter();
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [videoInfo, setVideo] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(false);
@@ -60,6 +62,12 @@ export default function RecipeExtractorPage() {
       setError("取得に失敗しました");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePost = () => {
+    if (videoInfo) {
+      router.push(`/recipes/${videoInfo.id}`);
     }
   };
 
@@ -131,7 +139,10 @@ export default function RecipeExtractorPage() {
               </div>
             </div>
             <div className="py-6">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+              <button
+                onClick={handlePost}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
                 この動画を投稿する
               </button>
             </div>
