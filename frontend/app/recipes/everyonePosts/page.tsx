@@ -36,22 +36,24 @@ export default function EveryonePostsPage() {
           <p className="text-center">読み込み中...</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* レスポンスが配列ではないのでmapは使えないの改善の必要がある */}
+            {/* レスポンスが配列ではないのでmapは使えないので改善の必要がある */}
             {recipes.map((recipe: any) => (
-              <div key={recipe.id} className="bg-white rounded-2xl shadow-sm border p-2">
+              <div key={recipe.id} className="bg-white rounded-2xl shadow-sm border overflow-hidden">
                 <img
                   src={recipe.thumbnail_url}
                   alt={recipe.title}
-                  className="w-full aspect-video object-cover rounded-xl mb-4"
+                  className="w-full aspect-video object-cover"
                 />
-                <h2 className="font-bold text-lg mb-2 line-clamp-2">{recipe.title}</h2>
-                <div className="flex flex-wrap gap-2">
-                  {recipe.ingredients.slice(0, 3).map((ing: any) => (
-                    <span key={ing.id} className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-md">
-                      {ing.name}
-                    </span>
-                  ))}
-                  {recipe.ingredients.length > 3 && <span className="text-xs text-gray-400">...他</span>}
+                <div className="p-4">
+                  <h2 className="font-bold text-lg mb-2 line-clamp-2">{recipe.title}</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {recipe.ingredients.slice(0, 3).map((ing: any) => (
+                      <span key={ing.id} className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-md">
+                        {ing.name}
+                      </span>
+                    ))}
+                    {recipe.ingredients.length > 3 && <span className="text-xs text-gray-400">...他</span>}
+                  </div>
                 </div>
               </div>
             ))}
