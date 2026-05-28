@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RecipeTabs from "../components/RecipeTabs";
@@ -38,14 +39,20 @@ export default function EveryonePostsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* レスポンスが配列ではないのでmapは使えないので改善の必要がある */}
             {recipes.map((recipe: any) => (
-              <div key={recipe.id} className="bg-white rounded-2xl shadow-sm border overflow-hidden">
+              <Link
+                key={recipe.id}
+                href={`/recipes/${recipe.id}`}
+                className="bg-white rounded-2xl shadow-sm border overflow-hidden transition-all hover:shadow-md hover:border-orange-200 group"
+              >
                 <img
                   src={recipe.thumbnail_url}
                   alt={recipe.title}
-                  className="w-full aspect-video object-cover"
+                  className="w-full aspect-video object-cover group-hover:opacity-90 transition-opacity"
                 />
                 <div className="p-4">
-                  <h2 className="font-bold text-lg mb-2 line-clamp-2">{recipe.title}</h2>
+                  <h2 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                    {recipe.title}
+                  </h2>
                   <div className="flex flex-wrap gap-2">
                     {recipe.ingredients.slice(0, 3).map((ing: any) => (
                       <span key={ing.id} className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-md">
@@ -55,7 +62,7 @@ export default function EveryonePostsPage() {
                     {recipe.ingredients.length > 3 && <span className="text-xs text-gray-400">...他</span>}
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
