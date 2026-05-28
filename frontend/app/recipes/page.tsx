@@ -2,8 +2,10 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Link from "next/link";
 import { useState, FormEvent, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import RecipeTabs from "./components/RecipeTabs";
+
 
 type Ingredient = {
   id: number;
@@ -20,6 +22,7 @@ type Recipe = {
 };
 
 export default function RecipeExtractorPage() {
+  const router = useRouter();
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [videoInfo, setVideo] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(false);
@@ -62,6 +65,12 @@ export default function RecipeExtractorPage() {
     }
   };
 
+  const handlePost = () => {
+    if (videoInfo) {
+      router.push(`/recipes/${videoInfo.id}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center">
       <Header />
@@ -69,6 +78,9 @@ export default function RecipeExtractorPage() {
         <h1 className="text-3xl font-bold mb-6 text-center">
           YouTubeレシピ食材抽出
         </h1>
+        <div className="py-2">
+          <RecipeTabs />
+        </div>
 
         <form
           onSubmit={handleSubmit}
@@ -84,7 +96,7 @@ export default function RecipeExtractorPage() {
             required
           />
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             disabled={loading}
           >
             {loading ? "取得中..." : "取得"}
@@ -125,6 +137,14 @@ export default function RecipeExtractorPage() {
                   </div>
                 ))}
               </div>
+            </div>
+            <div className="py-6">
+              <button
+                onClick={handlePost}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                この動画を投稿する
+              </button>
             </div>
           </div>
         )}

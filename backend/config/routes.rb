@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     post 'recipe/extract', to: 'recipe#extract'
 
     namespace :v1 do
+      resources :recipes, only: [:index, :show]
       get "recipes/youtube_api"
       post "recipes/youtube_api", to: "recipes#youtube_api"
     end
