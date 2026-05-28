@@ -26,6 +26,24 @@ class YoutubeRecipeExtractor
     save_recipe(details)
   end
 
+  # 新規追加: DB保存せずに抽出結果のみを返す
+  def preview
+    return nil unless @video_id
+    
+    details = fetch_youtube_details
+    return nil unless details
+
+    ingredients = parse_ingredients(details[:description])
+    
+    {
+      title:         details[:title],
+      video_id:      @video_id,
+      youtube_url:   @url,
+      thumbnail_url: details[:thumbnail_url],
+      ingredients:   ingredients
+    }
+  end
+
   private
 
   # DBに同じvideo_idのレシピが既に存在するか確認

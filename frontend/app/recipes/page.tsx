@@ -8,16 +8,17 @@ import RecipeTabs from "./components/RecipeTabs";
 
 
 type Ingredient = {
-  id: number;
+  id?: number;
   name: string;
   quantity: string;
 };
 
 type Recipe = {
-  id: number;
+  id?: number;
   title: string;
   thumbnail_url: string;
   video_id: string;
+  youtube_url: string;
   ingredients: Ingredient[];
 };
 
@@ -41,10 +42,10 @@ export default function RecipeExtractorPage() {
     setError("");
     setVideo(null);
     setLoading(true);
-    // ここでバックエンドのAPIにPOSTリクエストを送っている。
+
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recipes/youtube_api`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recipes/preview`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -65,9 +66,38 @@ export default function RecipeExtractorPage() {
     }
   };
 
-  const handlePost = () => {
+  const handlePost = async () => {
     if (videoInfo) {
-      router.push(`/recipes/${videoInfo.id}`);
+      setLoading(true);
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recipes`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipe: {
+              title: videoInfo.title,
+              video_id: videoInfo.video_id,
+              youtube_url: videoInfo.youtube_url,
+              thumbnail_url: videoInfo.thumbnail_url,
+              ingredients_attributes: videoInfo.ingredients.map(ing => ({
+                name: ing.name,
+                quantity: ing.quantity
+              }))
+            }
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error("投稿に失敗しました");
+        }
+
+        const data = await res.json();
+        router.push(`/recipes/everyonePosts`);
+      } catch {
+        setError("投稿に失敗しました");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -102,6 +132,9 @@ export default function RecipeExtractorPage() {
             {loading ? "取得中..." : "取得"}
           </button>
         </form>
+
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+
         {videoInfo && (
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8">
             <h2 className="text-xl font-bold mb-4">{videoInfo.title}</h2>
@@ -120,9 +153,9 @@ export default function RecipeExtractorPage() {
             </h3>
             <div className="p-4 bg-gray-50 border rounded">
               <div className="grid gap-3">
-                {videoInfo.ingredients.map((ingredient) => (
+                {videoInfo.ingredients.map((ingredient, index) => (
                   <div
-                    key={ingredient.id}
+                    key={index}
                     className="group relative flex items-center justify-between p-4 bg-white hover:bg-orange-50/50 border border-gray-100 rounded-2xl transition-all hover:border-orange-200 hover:shadow-md"
                   >
                     <div className="flex items-center gap-3">
@@ -141,9 +174,10 @@ export default function RecipeExtractorPage() {
             <div className="py-6">
               <button
                 onClick={handlePost}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                disabled={loading}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
               >
-                この動画を投稿する
+                {loading ? "投稿中..." : "この動画を投稿する"}
               </button>
             </div>
           </div>
