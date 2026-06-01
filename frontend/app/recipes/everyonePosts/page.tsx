@@ -4,6 +4,8 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RecipeTabs from "../components/RecipeTabs";
+import { Ingredient } from "../page";
+import { Recipe } from "../page";
 
 export default function EveryonePostsPage() {
   const [recipes, setRecipes] = useState([]);
@@ -37,8 +39,7 @@ export default function EveryonePostsPage() {
           <p className="text-center">読み込み中...</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* レスポンスが配列ではないのでmapは使えないので改善の必要がある */}
-            {recipes.map((recipe: any) => (
+            {recipes.map((recipe: Recipe) => (
               <Link
                 key={recipe.id}
                 href={`/recipes/${recipe.id}`}
@@ -54,7 +55,7 @@ export default function EveryonePostsPage() {
                     {recipe.title}
                   </h2>
                   <div className="flex flex-wrap gap-2">
-                    {recipe.ingredients.slice(0, 3).map((ing: any) => (
+                    {recipe.ingredients.slice(0, 3).map((ing: Ingredient) => (
                       <span key={ing.id} className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-md">
                         {ing.name}
                       </span>

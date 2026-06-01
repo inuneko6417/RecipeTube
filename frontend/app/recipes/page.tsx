@@ -7,13 +7,13 @@ import { useRouter } from "next/navigation";
 import RecipeTabs from "./components/RecipeTabs";
 
 
-type Ingredient = {
+export type Ingredient = {
   id?: number;
   name: string;
   quantity: string;
 };
 
-type Recipe = {
+export type Recipe = {
   id?: number;
   title: string;
   thumbnail_url: string;
