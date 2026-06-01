@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import RecipeTabs from "../components/RecipeTabs";
 import { Ingredient } from "../page";
 import { Recipe } from "../page";
+import { LoadingCat } from "../components/LoadingCat";
 
 export default function EveryonePostsPage() {
   const [recipes, setRecipes] = useState([]);
@@ -36,9 +37,9 @@ export default function EveryonePostsPage() {
         {/* ここでタブを表示 */}
         {/* <RecipeTabs activeTab="everyone" /> */}
         {loading ? (
-          <p className="text-center">読み込み中...</p>
+          <LoadingCat />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {recipes.map((recipe: Recipe) => (
               <Link
                 key={recipe.id}
