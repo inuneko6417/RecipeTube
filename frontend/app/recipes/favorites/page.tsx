@@ -1,7 +1,11 @@
 import RecipeTabs from "../components/RecipeTabs";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function FavoritesPosts() {
   return (
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center">
+    <Header />
     <div className="min-h-[480px] flex items-center justify-center p-8">
       <div className="text-center max-w-md w-full">
 
@@ -73,5 +77,7 @@ export default function FavoritesPosts() {
 
       </div>
     </div>
+    <Footer />
+  </div>
   );
 }

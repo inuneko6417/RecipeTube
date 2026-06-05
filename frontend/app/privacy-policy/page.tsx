@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: 'プライバシーポリシー',
@@ -6,6 +8,8 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
+  <div className="min-h-screen bg-gray-50 flex flex-col items-center">
+    <Header />
     <div className="container mx-auto p-4 max-w-4xl">
       <h1 className="text-3xl font-bold mb-6 text-center">プライバシーポリシー</h1>
 
@@ -45,5 +49,7 @@ export default function PrivacyPolicyPage() {
       </section>
       <p className="text-sm text-gray-500 mt-10 text-center">最終更新日: 2026年3月25日</p>
     </div>
+    <Footer />
+  </div>
   );
 }
