@@ -87,14 +87,18 @@ export default function RecipeExtractorPage() {
           }),
         });
 
-        if (!res.ok) {
-          throw new Error("投稿に失敗しました");
-        }
-
         const data = await res.json();
+        if (!res.ok) {
+          throw new Error(
+            data.errors?.join(", ") || "投稿に失敗しました");
+        }
         router.push(`/recipes/everyonePosts`);
-      } catch {
-        setError("投稿に失敗しました");
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("投稿に失敗しました");
+        }
       } finally {
         setLoading(false);
       }
@@ -177,7 +181,7 @@ export default function RecipeExtractorPage() {
                 disabled={loading}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
               >
-                {loading ? "投稿中..." : "この動画を投稿する"}
+                {loading ? "投稿中..." : "投稿する"}
               </button>
             </div>
           </div>
