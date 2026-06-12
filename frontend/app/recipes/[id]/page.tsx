@@ -54,10 +54,11 @@ export default function RecipeShowPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center">
       <Header />
-      <div className="py-2">
-        <RecipeTabs />
-      </div>
       <div className="container mx-auto p-4 max-w-2xl">
+        <h1 className="text-3xl font-bold mb-6 text-center">投稿詳細</h1>
+        <div className="py-2">
+          <RecipeTabs />
+        </div>
         <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-8">
           <h1 className="text-2xl font-bold mb-4">{recipe.title}</h1>
 
