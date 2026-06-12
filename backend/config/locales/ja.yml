@@ -8,6 +8,7 @@ ja:
       recipe:
         title: タイトル
         ingredients: 食材
+        video_id: このURL
 
   errors:
     models:
