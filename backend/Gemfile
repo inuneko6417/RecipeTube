@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 # Rails
 gem "rails", "~> 8.1.1"
+gem "rails-i18n"
 
 # Database
 gem "pg", "~> 1.1"

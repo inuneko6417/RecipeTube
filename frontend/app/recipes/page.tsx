@@ -27,7 +27,7 @@ export default function RecipeExtractorPage() {
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [videoInfo, setVideo] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (videoInfo) {
@@ -39,7 +39,7 @@ export default function RecipeExtractorPage() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError("");
+    setErrors([]);
     setVideo(null);
     setLoading(true);
 
@@ -60,7 +60,7 @@ export default function RecipeExtractorPage() {
       const data = await res.json();
       setVideo(data);
     } catch {
-      setError("取得に失敗しました");
+      setErrors(["取得に失敗しました"]);
     } finally {
       setLoading(false);
     }
@@ -89,16 +89,16 @@ export default function RecipeExtractorPage() {
 
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(
-            data.errors?.join(", ") || "投稿に失敗しました");
+          if (data.errors && Array.isArray(data.errors)) {
+            setErrors(data.errors);
+          } else {
+            setErrors(["投稿に失敗しました"]);
+          }
+          return;
         }
         router.push(`/recipes/everyonePosts`);
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("投稿に失敗しました");
-        }
+        setErrors(["通信エラーが発生しました"]);
       } finally {
         setLoading(false);
       }
@@ -137,17 +137,40 @@ export default function RecipeExtractorPage() {
           </button>
         </form>
 
-        {error && (
-          <div className="mb-8 animate-in fade-in slide-in-from-top-2 duration-300">
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl shadow-sm flex items-start gap-3">
-              <div className="flex-shrink-0 mt-0.5">
-                <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-sm font-bold text-red-800 uppercase tracking-wide">Error</h3>
-                <p className="text-sm text-red-700 mt-0.5 leading-relaxed">{error}</p>
+        {errors.length > 0 && (
+          <div className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500 ease-out">
+            <div className="relative overflow-hidden bg-white border border-red-100 rounded-3xl shadow-xl shadow-red-100/20">
+              {/* 装飾的な背景アクセント */}
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-red-500 to-orange-400" />
+
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-red-50 rounded-xl">
+                    <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-black text-gray-900 tracking-tight">
+                      確認が必要です
+                    </h3>
+                    <p className="text-sm text-gray-500 font-medium">以下の項目をご確認ください</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {errors.map((msg, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-3 p-3 bg-red-50/50 rounded-2xl border border-red-100/50 group hover:bg-red-50 transition-colors"
+                    >
+                      <div className="mt-1 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-400 group-hover:scale-125 transition-transform" />
+                      <p className="text-sm text-red-800 font-semibold leading-relaxed">
+                        {msg}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
