@@ -12,8 +12,7 @@ class Api::V1::RecipesController < ApplicationController
   end
 
   def create
-    @recipe = Recipe.find_or_initialize_by(video_id: recipe_params[:video_id])
-    @recipe.assign_attributes(recipe_params)
+    @recipe = Recipe.new(recipe_params)
 
     if @recipe.save
       render json: @recipe.as_json(include: :ingredients), status: :created

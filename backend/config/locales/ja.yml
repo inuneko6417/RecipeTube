@@ -1,0 +1,23 @@
+ja:
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      taken: "は既に投稿されています。"
+
+  activerecord:
+    models:
+      recipe: レシピ
+      ingredient: 材料
+
+    attributes:
+      recipe:
+        title: タイトル
+        ingredients: 食材
+        video_id: このURL
+
+    errors:
+      models:
+        recipe:
+          attributes:
+            ingredients:
+              blank: "を動画から取得できません。"
